@@ -1,5 +1,6 @@
 package org.javacommunity.utilitiez.services.reporting;
 
+import java.io.IOException;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
@@ -12,10 +13,10 @@ import java.util.Set;
 
 public interface ReportingService {
 
-    void generateReportForBiggestFile(List<Path> biggestFiles);
+    void generateReportForBiggestFile(List<Path> biggestFiles) throws IOException;
 
-    void generateReportForDuplicates(Set<Path> duplicates);
+    void generateReportForDuplicates(Set<Path> duplicates) throws IOException;
 
-    void generateReportForUnknownFiles(Map<Path, String> unknownFiles);
+    void generateReportForUnknownFiles(Map<Path, String> unknownFiles) throws IOException;
 
 }

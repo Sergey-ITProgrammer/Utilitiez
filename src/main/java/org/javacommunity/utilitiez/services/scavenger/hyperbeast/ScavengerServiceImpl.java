@@ -8,12 +8,12 @@ import java.nio.file.Paths;
 import java.util.*;
 import java.util.function.Predicate;
 
-public class Scavenger implements ScavengerService {
+public class ScavengerServiceImpl implements ScavengerService {
     final private List<Path> list = new ArrayList<>();
 
     @Override
     public List<Path> findAll() {
-        Path path = Paths.get("C:", "Users", "serge", "OneDrive", "Desktop", "test");
+        Path path = Paths.get("/home/sergey/Desktop/test1");
 
         File dir = new File(String.valueOf(path));
 

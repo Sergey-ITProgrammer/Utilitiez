@@ -3,18 +3,18 @@ package org.javacommunity.utilitiez;
 import org.javacommunity.utilitiez.console.ConsoleInit;
 import org.javacommunity.utilitiez.fx.FxInit;
 import org.javacommunity.utilitiez.services.analyzer.AnalyzerService;
-import org.javacommunity.utilitiez.services.analyzer.hyperbeast.Analyzer;
+import org.javacommunity.utilitiez.services.analyzer.hyperbeast.AnalyzerServiceImpl;
 import org.javacommunity.utilitiez.services.reporting.ReportingService;
-import org.javacommunity.utilitiez.services.reporting.cinghiamenisco.CsvReportingServiceImpl;
+import org.javacommunity.utilitiez.services.reporting.hyperbeast.ConsoleReportingServiceImpl;
+import org.javacommunity.utilitiez.services.reporting.hyperbeast.HTMLReportingServiceImpl;
+import org.javacommunity.utilitiez.services.reporting.hyperbeast.PlainTextReportingServiceImpl;
 import org.javacommunity.utilitiez.services.scavenger.ScavengerService;
-import org.javacommunity.utilitiez.services.scavenger.hyperbeast.Scavenger;
+import org.javacommunity.utilitiez.services.scavenger.hyperbeast.ScavengerServiceImpl;
 
 import java.io.IOException;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.security.NoSuchAlgorithmException;
 import java.util.*;
-import java.util.function.Predicate;
 import java.util.logging.Logger;
 
 public class Main {
@@ -31,43 +31,29 @@ public class Main {
     private static void startDebug(String[] args) throws NoSuchAlgorithmException, IOException {
 
         // Testing my scavenger.
-        ScavengerService myTestScavenger = new Scavenger();
+        ScavengerService myTestScavenger = new ScavengerServiceImpl();
 
         final List<Path> filesFound = myTestScavenger.findAll();
-
-        if(filesFound.isEmpty()) System.out.println("FOLDER IS EMPTY!");
-
-        System.out.println("I'm gonna print all the files I found!");
-
-        filesFound.forEach(System.out::println);
-
-        System.out.println();
+//        System.out.println("I'm gonna print all the files I found!");
+//        filesFound.forEach(System.out::println);
 
         // Testing my analyzer
-        AnalyzerService myTestAnalyzer = new Analyzer();
+        AnalyzerService myTestAnalyzer = new AnalyzerServiceImpl();
 
         int amountOfFilesToRetrieve = 10;
         final List<Path> biggestFiles = myTestAnalyzer.getBiggestFiles(filesFound, amountOfFilesToRetrieve);
-        System.out.println("I'm gonna print the " + amountOfFilesToRetrieve + " biggest files: ");
-        biggestFiles.forEach(System.out::println);
-
-        System.out.println();
 
         final Set<Path> duplicates = myTestAnalyzer.getDuplicates(filesFound);
-        System.out.println("I'm gonna print the duplicated files found: ");
-        duplicates.forEach(System.out::println);
-
-        System.out.println();
 
         final Map<Path, String> unknownFiles = myTestAnalyzer.getUnknownFiles(filesFound);
-        System.out.println("I'm gonna print a map of the unknown files, and their most probable type");
-        unknownFiles.entrySet().forEach(System.out::println);
 
+        if(filesFound.isEmpty()) System.out.println("FOLDER IS EMPTY!");
         // Testing my reporting service
-//        ReportingService myTestReporting = new CsvReportingServiceImpl();
-//        myTestReporting.generateReportForBiggestFile(biggestFiles);
-//        myTestReporting.generateReportForDuplicates(duplicates);
-//        myTestReporting.generateReportForUnknownFiles(unknownFiles);
+        ReportingService myTestReporting = new PlainTextReportingServiceImpl();
+
+        myTestReporting.generateReportForBiggestFile(biggestFiles);
+        myTestReporting.generateReportForDuplicates(duplicates);
+        myTestReporting.generateReportForUnknownFiles(unknownFiles);
     }
 
     /**************************************/

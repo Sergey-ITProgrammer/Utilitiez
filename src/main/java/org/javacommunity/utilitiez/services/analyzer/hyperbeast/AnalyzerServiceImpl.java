@@ -4,7 +4,6 @@ import org.javacommunity.utilitiez.services.analyzer.AnalyzerService;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.RandomAccessFile;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -12,7 +11,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.*;
 
-public class Analyzer implements AnalyzerService {
+public class AnalyzerServiceImpl implements AnalyzerService {
     @Override
     public List<Path> getBiggestFiles(List<Path> files, int amountOfFiles) {
         if(files.isEmpty() || amountOfFiles > files.size()) return new ArrayList<>();
@@ -61,7 +60,7 @@ public class Analyzer implements AnalyzerService {
         LinkedHashMap<Path, String> listOfUnknownFiles = new LinkedHashMap<>();
 
         LinkedHashMap<String, String> listOfFileSignature = new LinkedHashMap<>();
-        Path pathOfFileSignatureList = Paths.get("C:", "Users", "serge", "OneDrive", "Desktop", "JavaProjects", "Utilitiez", "List of file signatures.txt");
+        Path pathOfFileSignatureList = Paths.get("/home", "sergey", "Desktop", "JavaProjects", "Utilitiez", "List of file signatures.txt");
         List<String> fileOfSignatures = Files.readAllLines(pathOfFileSignatureList);
 
         for (String s : fileOfSignatures) {
@@ -82,7 +81,7 @@ public class Analyzer implements AnalyzerService {
             String fileExtension = getFileExtension(files.get(i));
 
             if (fileExtension.isEmpty()) {
-                String extension = getUnknownFileExtension(files.get(i), listOfFileSignature, files.size());
+                String extension = getUnknownFileExtension(files.get(i), listOfFileSignature);
                 listOfUnknownFiles.put(files.get(i), extension);
             }
         }
@@ -104,7 +103,7 @@ public class Analyzer implements AnalyzerService {
         return fileExtension;
     }
 
-    private String getUnknownFileExtension(Path filePath, LinkedHashMap<String, String> listOfFileSignature, int fileSize) throws NoSuchAlgorithmException, IOException {
+    private String getUnknownFileExtension(Path filePath, LinkedHashMap<String, String> listOfFileSignature) throws NoSuchAlgorithmException, IOException {
         String signature = "";
 
         byte[] arrayOfBytesOfFile = Files.readAllBytes(filePath);
